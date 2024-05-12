@@ -12,4 +12,11 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-require __DIR__.'/auth.php';
+
+Route::get('dashboard/{channel}', function (App\Models\Channel $channel) {
+    return view('chat', ['channel' => $channel]);
+})
+    ->middleware(['auth'])
+    ->name('dashboard.chat');
+
+require __DIR__ . '/auth.php';

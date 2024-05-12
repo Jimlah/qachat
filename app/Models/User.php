@@ -44,4 +44,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function channels()
+    {
+        return $this->belongsToMany(Channel::class, 'channel_subscribers');
+    }
 }
