@@ -20,7 +20,7 @@ $channels = computed(
 
 
 
-<div class="flex flex-col w-full h-full max-w-xs p-5">
+<div class="flex flex-col w-full h-full p-5">
     <div class="flex-none w-full">
         <span class="flex items-center justify-start gap-2 text-slate-500">
             <span>All Chats</span>

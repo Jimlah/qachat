@@ -13,7 +13,7 @@ $user = computed(
     fn () => $this->channel
         ->subscribers()
         ->where('user_id', '!=', auth()->id())
-        ->first()
+        ->firstOrFail()
 );
 
 $chatMessages = computed(fn () =>
