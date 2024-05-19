@@ -49,4 +49,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Channel::class, 'channel_subscribers');
     }
+
+    public function canJoinRoom(int $channelId): bool
+    {
+        return true;
+        return $this->channels()->where('channel_id', $channelId)
+            ->whereRelation('subscribers', 'user_id', $this->id)
+            ->exists();
+    }
 }

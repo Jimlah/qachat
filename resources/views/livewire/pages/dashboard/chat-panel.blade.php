@@ -1,13 +1,18 @@
 <?php
 
+use App\Events\MessageSent;
 use App\Models\Channel;
 use App\Models\User;
 
 use function Livewire\Volt\{computed, state, mount, rules, updated, on};
 
-on(['refresh' => '$refresh']);
+on([
+    'refresh' => '$refresh',
+    "echo:message.id,MessageSent" => 'messageSent',
+]);
 state(['content']);
 state(['channel']);
+
 
 $user = computed(
     fn () => $this->channel
@@ -31,6 +36,7 @@ $submit = function () {
         'user_id' => auth()->id(),
         'content' => $this->content
     ]);
+    MessageSent::dispatch($this->channel);
     $this->reset('content');
 };
 
@@ -40,7 +46,23 @@ $submit = function () {
     <div class="relative flex items-start justify-start w-full h-full">
         <div class="flex flex-col items-start justify-start w-full h-full divide-y grow divide-slate-800/50">
             <div class="flex items-center justify-start gap-5 p-5">
-                <div class="rounded-full size-12 aspect-square bg-slate-800"></div>
+                <div class="relative rounded-full size-12 aspect-square bg-slate-800">
+                    <div class="absolute bottom-0 right-0 bg-green-500 rounded-full size-4 aspect-square" x-init="
+                    Echo.join(`chat.{{$this->channel->id}}`)
+    .here((users) => {
+        console.log(users, 'here');
+    })
+    .joining((user) => {
+        console.log(user.name, 'joining');
+    })
+    .leaving((user) => {
+        console.log(user.name, 'leaving');
+    })
+    .error((error) => {
+        console.error(error.error);
+    });
+                    "></div>
+                </div>
                 <div class="flex flex-col items-start justify-between w-full gap-2">
                     <p class="text-sm">{{ $this->user->name }}</p>
                     <p class="text-xs text-slate-500">{{ now()->format('h:ia') }}</p>
